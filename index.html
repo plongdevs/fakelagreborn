@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <title>🔓 Mở khoá nội dung</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: linear-gradient(135deg, #b5f0ff, #e0c3fc, #f9f9f9);
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      color: #222;
+      overflow-y: auto;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 25px 30px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+      text-align: center;
+      max-width: 360px;
+      animation: fadeIn 0.5s ease;
+      margin-bottom: 100px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(10px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 { margin-bottom: 10px; color: #333; }
+    p { color: #444; font-size: 15px; }
+
+    .action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      padding: 12px 20px;
+      cursor: pointer;
+      margin: 10px 0;
+      transition: all 0.3s ease;
+      font-size: 16px;
+      position: relative;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    }
+
+    .action:hover { transform: translateY(-2px); opacity: 0.9; }
+    #ttBtn { background: linear-gradient(90deg, #ff0000, #ff4d4d); }
+    #zlBtn { background: linear-gradient(90deg, #0088cc, #33b1ff); }
+
+    .action.success {
+      background: linear-gradient(90deg, #2ecc71, #52d681) !important;
+    }
+
+    .checkmark {
+      position: absolute;
+      right: 15px;
+      font-size: 18px;
+      display: none;
+    }
+
+    .action.success .checkmark {
+      display: inline;
+      animation: pop 0.3s ease forwards;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .status { margin-top: 15px; font-weight: 500; color: #333; }
+    #retryBtn {
+      margin-top: 12px;
+      display: none; /* ẩn trước khi hoàn thành nhiệm vụ */
+      padding: 10px 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      background: #ff9800;
+      color: white;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    #retryBtn:hover { filter: brightness(1.1); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>🔒 Nội dung bị khóa</h2>
+    <p>Vui lòng ấn vào cả 2 nút dưới đây để mở khóa</p>
+
+    <div id="ttBtn" class="action">
+      ▶️ Follow Tiktok
+      <span class="checkmark">✅</span>
+    </div>
+
+    <div id="zlBtn" class="action">
+      💬 Tham gia nhóm Zalo
+      <span class="checkmark">✅</span>
+    </div>
+
+    <div id="status" class="status">❌ Chưa hoàn thành.</div>
+
+    <!-- Nút tải lại sẽ hiện sau khi hoàn thành nhiệm vụ -->
+    <a id="retryBtn" href="base.apk" download>🔄 Tải lại nếu có sự cố</a>
+  </div>
+
+  <script>
+    const ttBtn = document.getElementById("ttBtn");
+    const zlBtn = document.getElementById("zlBtn");
+    const statusEl = document.getElementById("status");
+    const retryBtn = document.getElementById("retryBtn");
+
+    let ttDone = false;
+    let zlDone = false;
+
+    function checkBothDone() {
+      if(ttDone && zlDone){
+        retryBtn.style.display = "inline-block"; // hiện nút tải lại
+        let countdown = 10;
+        statusEl.innerText = `⏳ Tự tải file trong ${countdown} giây...`;
+
+        const timer = setInterval(() => {
+          countdown--;
+          if(countdown > 0){
+            statusEl.innerText = `⏳ Tự tải file trong ${countdown} giây...`;
+          } else {
+            clearInterval(timer);
+            statusEl.innerText = "✅ Đang tải file...";
+            window.location.href = retryBtn.href; // tự động tải
+          }
+        }, 1000);
+      }
+    }
+
+    ttBtn.onclick = () => {
+      if(!ttDone){
+        ttBtn.classList.add("success");
+        ttDone = true;
+        window.open("https://tiktok.com/@plongdev.128", "_blank");
+        statusEl.innerText = "✅ Đã nhấn Follow TikTok!";
+        checkBothDone();
+      }
+    }
+
+    zlBtn.onclick = () => {
+      if(!zlDone){
+        zlBtn.classList.add("success");
+        zlDone = true;
+        window.open("https://zalo.me/g/pvkacy065", "_blank");
+        statusEl.innerText = "✅ Đã tham gia nhóm Zalo!";
+        checkBothDone();
+      }
+    }
+  </script>
+
+</body>
+</html>
